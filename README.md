@@ -1,2 +1,2 @@
 # zat
-a file recompression utility for SLX, PNT and MAT files
+a file recompression utility for SLX, PNG and MAT files
