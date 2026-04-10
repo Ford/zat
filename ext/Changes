@@ -1,0 +1,8 @@
+Revision history for Perl extension Zat.
+
+0.01  Tue Nov 17 04:42:50 2020
+	- original version; created by h2xs 1.23 with options
+		-A -n Zat
+
+1.00  Tue Mar 24 17:45:24 EDT 2026
+	- initial release

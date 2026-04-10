@@ -1,0 +1,44 @@
+NAME
+
+	Zat - A perl utility module for ZLIB-based recompression
+
+
+SYNOPSIS
+
+	use Zat;
+	use Compress::Zlib qw(Z_DEFAULT_COMPRESSION Z_OK)
+
+	my ($status,@output) = zat(Z_DEFAULT_COMPRESSION,<STDOUT>);
+	print STDOUT @output if $status == Z_OK;
+
+
+DESCRIPTION
+	The 'zat' command uses ZLIB library to recompress an input array (with a specified compression-level)
+	to an output array. If successful, it returns a status code of Z_OK. Otherwise, it would be Z_DATA_ERROR
+	or other ZLIB error codes.
+
+INSTALLATION
+
+	To build this module on MSYS2 Windows platform, type the following:
+
+		perl Makefile.PL
+		make CC=/usr/bin/gcc LD=/usr/bin/g++
+
+	On other platforms (including Linux), the default compiler and linker may suffice.
+
+		perl Makefile.PL
+		make
+
+	After a successful build, you may install as follows:
+
+		make test && make install
+
+DEPENDENCIES
+
+	Building this module requires the ZLIB data-compression library.
+
+
+AUTHOR AND COPYRIGHT
+
+	Written by Hasdi R Hashim <hhashim@ford.com>
+	Copyright (C) 2021 by Ford Motor Company

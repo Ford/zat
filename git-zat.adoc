@@ -1,0 +1,101 @@
+git-zat(1)
+==========
+
+NAME
+----
+git-zat - Apply zat on files in the staging area, or alternatively, files within specified git references.
+
+SYNOPSIS
+--------
+[verse]
+'git zat' [--sdbm[=<path>]] [<refspec>...]
+
+
+DESCRIPTION
+-----------
+
+This will use _zat_ to remove compression from all files in the staging area.
+If git references are specified, files in branches (or tags) that match those "refspecs" are zatted instead.
+Files that zat does not recognize, or already modified, are left alone.
+
+Any files changed (due to compression removal) would also *change the hash of their objects, thus the commit itself.* This will alter the commit history of affected branches
+and tags, which may require their remote counterparts to be forcibly updated.
+To preserve the commit history, refer to ``options'' and ``examples'' sections.
+
+
+OPTIONS
+-------
+
+--sdbm[=<path>]::
+	For improved performance, use _SDBM_ database files to remember hashes of previously zatted files and commits.
+	If `path` is not specified, it defaults to `$GIT_DIR/zat` so database files `zat.dir` and `zat.pag`
+	will be created in the current git directory.
+
+
+<refspec>...::
+	Files to be zatted will be revisions from branches (or tags) that matches each `<refspec>`.
+	If no references are specified, files in the staging area are zatted instead.
++
+A simple `<refspec>` parameter is a plus `+` followed by a source reference,
+e.g., `+refs/tag/v2.0` or `+refs/heads/*`. To keep files from the source intact, a parameter can be suffixed with a colon `:` and a destination reference, e.g., `+refs/heads/*:refs/remotes/target/*`.
+
+-h::
+--help::
+	Show a help message and exit.
+
+
+
+EXAMPLES
+--------
+
+* Zat all files in the staging area only. If this operation will be applied frequently, using `--sdbm` option is recommended.
++
+----------------
+$ git zat
+----------------
++
+You can incorporate this operation in a `pre-commit` hook, particularly when using git without built-in zat (or with `git add` configured not to use that feature automatically).
++
+---------
+#!/bin/sh
+ ...
+git zat --sdbm
+if [[ -z $(git status --short) ]]
+then
+    echo 'nothing to commit, working tree clean';
+    exit 1
+fi
+---------
++
+
+* Zat all revisions for every file in the current repository.
++
+----------------------------------
+$ git zat +ref/heads/* +ref/tags/*
+----------------------------------
++
+To zat only file revisions in the `myChanges` branch:
++
+----------------------------------
+$ git zat +ref/heads/myChanges
+----------------------------------
+
+* Zat all branches in a repository from `source` remote to `target` remote.
++
+--------------------------------------------
+$ git fetch source --prune --no-tags
+$ git zat +refs/remotes/source/heads/*:refs/heads/*
+$ git push target --prune
+--------------------------------------------
++
+To include all `source` tags in the conversion:
++
+--------------------------------------------
+$ git fetch source --prune
+$ git zat +refs/remotes/source/heads/*:refs/heads/* +refs/tags/*
+$ git push target --prune --tags
+--------------------------------------------
+
+SEE ALSO
+--------
+man:git-filter-repo[1], man:git-filter-branch[1]

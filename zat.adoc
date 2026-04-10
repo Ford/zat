@@ -1,0 +1,55 @@
+zat(1)
+======
+
+NAME
+----
+
+zat - recompress data, cat it, or die
+
+
+SYNOPSIS
+--------
+[verse]
+'zat' [-<level>] [--file <input-file> <output-file>]
+'zat' --version 
+
+
+DESCRIPTION
+-----------
+
+Identify data format from standard input. If recognized, attempt to recompress the data
+to standard output. Otherwise, just print as-is. If the recompression fails, print to standard 
+error and terminate with `EXIT_FAILURE`.
+
+
+Recognized data formats include:
+
+* *ZIP* - ISO/IEC 21320-1 Document Container Format (based on ZIP version 6.3.3)
+
+
+* *PNG* - image data for Portable Network Graphics
+
+
+* *MAT* - Matlab v5 mat-file (little endian) version 0x0100
+
+
+OPTIONS
+-------
+
+-<level>::
+	Set _zlib_ compression <level>, a single digit from 0 to 9, where 0 is for `Z_NO_COMPRESSION` and 9 for `Z_BEST_COMPRESSION`.
+	If omitted, sets to `Z_DEFAULT_COMPRESSION`.
+
+--file <input-file> <output-file>::
+	Read from _<input-file>_ instead of standard input, and print to _<output-file>_ instead of standard output.
+
+--version::
+	Print version to standard output then simply exit.
+
+
+AUTHOR AND COPYRIGHT
+--------------------
+
+Written by Hasdi R Hashim <hhashim@ford.com>
+
+Copyright (C) 2021 by Ford Motor Company
